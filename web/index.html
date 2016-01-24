@@ -1,0 +1,40 @@
+<html>
+<head>
+</head>
+<body>
+<input id='input'>
+<div id='log'>
+  <span>End of log</span>
+</div>
+<script>
+
+  var Socket = new WebSocket("ws://theepicsnail.net:1234/echo");
+  Socket.onopen = function() {
+    console.log("Connected");
+    Socket.send("Connected");
+  };
+
+  Socket.onmessage = function(evt) {
+    console.log("on message", evt);
+    var span = document.createElement("p");
+    span.appendChild(document.createTextNode(evt.data));
+    log.insertBefore(span, log.childNodes[0]);
+  }
+
+  Socket.onclose = function() {}
+
+
+  var input = document.getElementById("input");
+  input.onkeyup = function(evt) {
+    if(evt.keyCode == 13) {
+      console.log(input.value);
+      Socket.send(input.value);
+      input.value = "";
+    }
+  }
+
+  var log = document.getElementById("log");
+
+</script>
+</body>
+</html>
